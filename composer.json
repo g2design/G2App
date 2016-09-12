@@ -1,0 +1,26 @@
+{
+	
+	"name": "g2design/G2App",
+	"authors": [
+        {
+            "name": "Stephan Wessels",
+			"email": "stwessl@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "G2Design": "src/"
+        }
+    },
+	
+	
+	
+	"extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+	"require": {
+		"phroute/phroute": "^2.1"
+	}
+}
