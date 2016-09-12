@@ -12,9 +12,7 @@
             "G2Design": "src/"
         }
     },
-	
-	
-	
+
 	"extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"

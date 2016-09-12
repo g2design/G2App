@@ -1,9 +1,10 @@
 <?php
 
 namespace G2Design\ClassStructs;
+use ReflectionClass;
 
 abstract class Module {
-	var $app=  null;
+	var $app=  null, $controllers = [];
 
 	abstract function init();
 	function connect(\G2Design\G2App $app){
@@ -15,6 +16,50 @@ abstract class Module {
 	}
 	
 	function addController($slug, $controller) {
-		$this->app->router->controller(strtolower(get_class($this)).'/'.$slug, $controller);
+		
+		$reflection = new ReflectionClass(get_class($this));
+		$slug = strtolower($reflection->getShortName()).'/'.$slug;
+		$slug = trim($slug, '/');
+		
+		$this->controller[] = $controller;
+		
+		$this->app->router->controller($slug, $controller);
+	}
+	
+	function getDir() {
+		$reflector = new ReflectionClass(get_class($this));
+		
+		return dirname($reflector->getFileName());
+	}
+	
+	function add_controllers($directory) {
+		$files = \G2Design\Utils\Functions::directoryToArray($directory, false);
+		
+		foreach($files as $file) {
+			//strip the module directory from the filepath
+			$file = str_replace('src', '', str_replace($this->getDir(), '', $file));
+			$file = trim($file, '\\ ,\/');
+			$file = str_replace(".". \G2Design\Utils\Functions::get_extension($file), '', $file);
+			//Convert filepath to class name
+			$parts = explode("/", $file);
+			
+			$classname = "\\";
+			foreach($parts as &$part) $part = ucfirst ($part);
+			
+			$classname .= implode('\\', $parts);
+		
+			
+			if(class_exists($classname)) {
+				$slug = current(array_reverse($parts));
+				
+				$slug = strtolower($slug);
+				if($slug == 'index') {
+					$slug = '';
+				}
+				
+				$this->addController($slug,$classname);
+			}
+			
+		}
 	}
 }
