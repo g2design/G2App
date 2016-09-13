@@ -16,8 +16,8 @@ class Controller extends Base {
 	{
 		global $config;
 		
-		if(strpos($loc, BASE_URL) === false) {
-			$loc = BASE_URL . $loc;
+		if(strpos($loc, \G2Design\Utils\Functions::get_current_site_url()) === false) {
+			$loc = \G2Design\Utils\Functions::get_current_site_url() . $loc;
 		}
 		header('Location: '. $loc);
 	}
