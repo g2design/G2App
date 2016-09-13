@@ -25,6 +25,11 @@ class G2App extends ClassStructs\Singleton {
 		return self::$instance; 
 	}
 	
+	/**
+	 * 
+	 * @param \Composer\Autoload\ClassLoader $loader
+	 * @return G2App
+	 */
 	public static function init(\Composer\Autoload\ClassLoader $loader) {
 		self::$instance = new self($loader);
 		

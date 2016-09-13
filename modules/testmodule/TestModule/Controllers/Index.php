@@ -115,11 +115,10 @@ class Index extends \G2Design\G2App\Controller {
 		$this->redirect('dashboard');
 	}
 
-	function login() {
+	function anyLogin() {
 
-		$view = new \G2_TwigView('pages/login');
-		$view->w = $this->loadModel('winery_model'); /* @var $view->w Winery_Model */
-		
+		$view = new G2App\View('pages/login');
+		$view->w = new \TestModule\Model\Winery(); /* @var $view->w Winery_Model */
 
 		if (( $view->form = $view->w->login() ) === true) {
 			$this->redirect('dashboard');
