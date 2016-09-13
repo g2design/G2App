@@ -3,15 +3,32 @@ namespace G2Design;
 use Phroute\Phroute\RouteCollector;
 
 class G2App extends ClassStructs\Singleton {
+	private static $instance = null;
 	
+	var $loader = null;
 	/**
 	 *
 	 * @var RouteCollector
 	 */
 	var $router = null, $modules = [];
 	
-	protected function __construct() {
+	protected function __construct(\Composer\Autoload\ClassLoader $loader ) {
 		$this->router = new RouteCollector();
+		
+		$this->loader = $loader;
+	}
+	
+	public static function getInstance() {
+		if(!self::$instance) {
+			throw new Exception("App instance not initiated. Please call init() function");
+		}
+		return self::$instance; 
+	}
+	
+	public static function init(\Composer\Autoload\ClassLoader $loader) {
+		self::$instance = new self($loader);
+		
+		return self::$instance;
 	}
 
 	function start() {
@@ -34,7 +51,6 @@ class G2App extends ClassStructs\Singleton {
 	}
 	
 	function add_modules($directory) {
-		global $loader;
 		$dirs = Utils\Functions::directoryToArray($directory, false);
 		
 		foreach($dirs as $dir) {
@@ -49,7 +65,7 @@ class G2App extends ClassStructs\Singleton {
 //						include $file;
 						
 						$class_name = str_replace(".$ext",'',basename($file));
-						$loader->add("$class_name",  dirname($file));
+						$this->loader->add("$class_name",  dirname($file));
 						
 						$class = "\\$class_name";
 						if(class_exists($class)) {

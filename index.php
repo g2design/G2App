@@ -3,7 +3,7 @@
 global $loader;
 $loader = require './vendor/autoload.php';
 
-$app = G2Design\G2App::getInstance();
+$app = G2Design\G2App::init($loader);
 
 $app->add_modules('modules');
 
