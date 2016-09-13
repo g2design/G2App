@@ -34,6 +34,7 @@ class G2App extends ClassStructs\Singleton {
 	}
 	
 	function add_modules($directory) {
+		global $loader;
 		$dirs = Utils\Functions::directoryToArray($directory, false);
 		
 		foreach($dirs as $dir) {
@@ -45,9 +46,12 @@ class G2App extends ClassStructs\Singleton {
 					
 					if($ext == 'php') { // Is a php file
 						//Load the file
-						include $file;
+//						include $file;
+						
 						$class_name = str_replace(".$ext",'',basename($file));
-						$class = "\\$class_name\\$class_name";
+						$loader->add("$class_name",  dirname($file));
+						
+						$class = "\\$class_name";
 						if(class_exists($class)) {
 							$module = new $class();/* @var $module ClassStructs\Module */
 							$this->add_module($module);
@@ -56,6 +60,21 @@ class G2App extends ClassStructs\Singleton {
 				}
 			}
 		}
+	}
+	
+	static function get_module_dir($file) {
+		$instance = self::getInstance();
+		if ($instance) {
+				foreach ($instance->modules as $module) { /* @var $module ClassStructs\Module */
+					$reflection = new \ReflectionClass($module);
+					$dir = dirname($reflection->getFileName());
+					if (strpos($file, $dir) !== false) {
+						return $dir;
+					}
+				}
+			} else {
+				throw new Exception('Singleton Not instantiated');
+			}
 	}
 	
 	function defaultController($controller) {

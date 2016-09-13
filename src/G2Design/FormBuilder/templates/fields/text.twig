@@ -1,0 +1,2 @@
+<label for="">{{ label | default(name) }}</label>
+<input type="{{ type | default('text') }}" name="{{ name }}" class="{{ classes }}" {{ this.render_attrs() }} {% if this.required %}required{%endif%}>

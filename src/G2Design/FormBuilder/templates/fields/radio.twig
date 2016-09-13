@@ -1,0 +1,6 @@
+<label >{{ label | default(name) }}</label>
+<div class="div">
+	{% for option in options %}
+		<label for="">{{ option.label }}</label><input type="radio" name="{{ name }}" value="{{ option.value}}" {% if option.value == value %} checked="checked" {% endif %} />
+	{% endfor %}
+</div>
