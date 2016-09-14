@@ -27,6 +27,7 @@
 		"stwessl/form": "dev-master",
 		"twig/twig": "@stable",
 		"codeguy/upload": "*",
-		"wixel/gump": "@stable"
+		"wixel/gump": "@stable",
+		"aura/session": "^2.0"
 	}
 }
