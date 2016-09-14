@@ -7,12 +7,19 @@ use Aura\Session;
 class Base {
 	/**
 	 *
-	 * @var Session\Session
+	 * @var Session\Segment
 	 */
 	static $session = null;
 
 	function get_module_dir($module = false) {
 
+		$file_uri = $this->get_running_module_file();
+
+		return \G2Design\G2App::get_module_dir($file_uri).'/';
+		
+	}
+	
+	function get_running_module_file() {
 		$t = debug_backtrace();
 		$file_uri = $t[0]['file'];
 		foreach ($t as $row) {
@@ -22,22 +29,23 @@ class Base {
 				break;
 			}
 		}
-
-		$path = str_replace(\G2Design\G2App::get_module_dir($file_uri), '', $file_uri);
-		$paths_arr = explode(DIRECTORY_SEPARATOR, $path);
-		list($junk, $package) = $paths_arr;
-		return \G2Design\G2App::get_module_dir($file_uri).'/';
 		
+		return $file_uri;
+	}
+	
+	function get_module_instance() {
+		return \G2Design\G2App::get_module_instance($this->get_running_module_file());
 	}
 	
 	/**
 	 * 
-	 * @return Session\Session;
+	 * @return Session\Segment;
 	 */
 	function session() {
 		if(!isset(self::$session)) {
 			$factory = new Session\SessionFactory();
-			self::$session = $factory->newInstance($_COOKIE);
+			$session = $factory->newInstance($_COOKIE);
+			self::$session = $session->getSegment(get_class($this->get_module_instance()));
 		}
 		
 		return self::$session;

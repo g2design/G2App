@@ -75,13 +75,28 @@ class G2App extends ClassStructs\Singleton {
 						$this->loader->add("$class_name", dirname($file));
 
 						$class = "\\$class_name";
-						if(class_exists($class) && is_subclass_of($class, '\G2Design\ClassStructs\Module', true)) {
+						if (class_exists($class) && is_subclass_of($class, '\G2Design\ClassStructs\Module', true)) {
 							$module = new $class(); /* @var $module ClassStructs\Module */
 							$this->add_module($module);
 						}
 					}
 				}
 			}
+		}
+	}
+
+	static function get_module_instance($file) {
+		$instance = self::getInstance();
+		if ($instance) {
+			foreach ($instance->modules as $module) { /* @var $module ClassStructs\Module */
+				$reflection = new \ReflectionClass($module);
+				$dir = dirname($reflection->getFileName());
+				if (strpos($file, $dir) !== false) {
+					return $module;
+				}
+			}
+		} else {
+			throw new Exception('Singleton Not instantiated');
 		}
 	}
 
