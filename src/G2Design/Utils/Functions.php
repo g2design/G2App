@@ -63,20 +63,6 @@ class Functions {
 		return $final_url;
 	}
 
-	static function curPageURL() {
-		$pageURL = 'http';
-		if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
-			$pageURL .= "s";
-		}
-		$pageURL .= "://";
-		if ($_SERVER["SERVER_PORT"] != "80") {
-			$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-		} else {
-			$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-		}
-		return $pageURL;
-	}
-
 	static function directoryToArray($directory, $recursive) {
 		$array_items = array();
 		if ($handle = opendir($directory)) {
@@ -98,7 +84,44 @@ class Functions {
 		}
 		return $array_items;
 	}
-	
+
+	static function compress($code) {
+		$code = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $code);
+		$code = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $code);
+		$code = str_replace('{ ', '{', $code);
+		$code = str_replace(' }', '}', $code);
+		$code = str_replace('; ', ';', $code);
+
+		return $code;
+	}
+
+	static function GET_to_string($arr = false) {
+		if ($arr === false) {
+			$arr = $_GET;
+		}
+		$string = [];
+		foreach ($arr as $key => $value) {
+			$key = urlencode($key);
+			$value = urlencode($value);
+			$string[] = "$key=$value";
+		}
+		return implode('&', $string);
+	}
+
+	static function curPageURL() {
+		$pageURL = 'http';
+		if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
+			$pageURL .= "s";
+		}
+		$pageURL .= "://";
+		if ($_SERVER["SERVER_PORT"] != "80") {
+			$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+		} else {
+			$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+		}
+		return $pageURL;
+	}
+
 	static function get_extension($file) {
 		$str = $file;
 		$i = strrpos($str, ".");
@@ -108,6 +131,63 @@ class Functions {
 		$l = strlen($str) - $i;
 		$ext = substr($str, $i + 1, $l);
 		return $ext;
+	}
+
+	/**
+	 * Determince location of connection user
+	 *
+	 * @return type
+	 */
+	static function get_location() {
+		if (!isset($_SESSION['framework_location'])) {
+			$ip = $_SERVER['REMOTE_ADDR'];
+			$details = file_get_contents("http://ipinfo.io/{$ip}/json");
+			$_SESSION['framework_location'] = $details;
+		} else {
+			$details = $_SESSION['framework_location'];
+		}
+
+		return json_decode($details);
+	}
+
+	static function createDateRangeArray($strDateFrom, $strDateTo) {
+		// takes two dates formatted as YYYY-MM-DD and creates an
+		// inclusive array of the dates between the from and to dates.
+		// could test validity of dates here but I'm already doing
+		// that in the main script
+
+		$aryRange = array();
+
+		$iDateFrom = mktime(1, 0, 0, substr($strDateFrom, 5, 2), substr($strDateFrom, 8, 2), substr($strDateFrom, 0, 4));
+		$iDateTo = mktime(1, 0, 0, substr($strDateTo, 5, 2), substr($strDateTo, 8, 2), substr($strDateTo, 0, 4));
+
+		if ($iDateTo >= $iDateFrom) {
+			array_push($aryRange, date('Y-m-d', $iDateFrom)); // first entry
+
+			while ($iDateFrom < $iDateTo) {
+				$iDateFrom+=86400; // add 24 hours
+				array_push($aryRange, date('Y-m-d', $iDateFrom));
+			}
+		}
+		return $aryRange;
+	}
+
+	static function array_to_csv_download($array, $filename = "export.csv", $delimiter = ";") {
+		// open raw memory as file so no temp files needed, you might run out of memory though
+		$f = fopen('php://memory', 'w');
+		// loop over the input array
+		foreach ($array as $line) {
+			// generate csv lines from the inner arrays
+			fputcsv($f, $line, $delimiter);
+		}
+		// rewrind the "file" with the csv lines
+		fseek($f, 0);
+		// tell the browser it's going to be a csv file
+		header('Content-Type: application/csv');
+		// tell the browser we want to save it instead of displaying it
+		header('Content-Disposition: attachement; filename="' . $filename . '";');
+		// make php send the generated csv lines to the browser
+		fpassthru($f);
 	}
 
 }

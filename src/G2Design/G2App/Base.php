@@ -20,7 +20,6 @@ class Base {
 		$paths_arr = explode(DIRECTORY_SEPARATOR, $path);
 		list($junk, $package) = $paths_arr;
 		return \G2Design\G2App::get_module_dir($file_uri).'/';
-
 		
 	}
 
