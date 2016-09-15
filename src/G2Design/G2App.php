@@ -34,6 +34,7 @@ class G2App extends ClassStructs\Singleton {
 	 * @return G2App
 	 */
 	public static function init(\Composer\Autoload\ClassLoader $loader) {
+		error_reporting(E_ERROR | E_WARNING);
 		self::$instance = new self($loader);
 
 		return self::$instance;

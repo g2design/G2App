@@ -3,7 +3,7 @@
 namespace G2Design\ClassStructs;
 use ReflectionClass;
 
-abstract class Module {
+abstract class Module extends \G2Design\G2App\Base {
 	var $app=  null, $controllers = [];
 
 	abstract function init();
