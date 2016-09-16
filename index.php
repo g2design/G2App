@@ -14,5 +14,8 @@ $app->defaultController("\\TestModule\\Controllers\\Index");
 //Database connection
 G2Design\Database::setup(\G2Design\Config::get()->databases);
 
-
-$app->start();
+try{
+	$app->start();
+} catch (Exception $ex) {
+	echo $ex->getMessage();
+}
