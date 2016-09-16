@@ -4,9 +4,9 @@ namespace G2Design\G2App\View;
 
 //use Tale\Jade;
 
-class Jade extends \G2Design\G2App\View {
+class Pug extends \G2Design\G2App\View {
 
-	var $params = [], $jade, $template, $dir;
+	var $params = [], $pug, $template, $dir;
 
 	public function __construct($template, $other_module = false) {
 		$this->template = $template;
@@ -30,13 +30,16 @@ class Jade extends \G2Design\G2App\View {
 
 		$this->dir = $this->get_module_dir($other_module).'Views';
 		
-		$this->jade = new \Tale\Jade\Renderer([
-			'paths' => [ $this->dir ]
+		$this->pug = new \Pug\Pug([
+			'extension' => ".jade",
+			'basedir' => $this->dir
 		]);
 	}
 
 	function render($return = false) {
-		$content = $this->jade->render($this->template, $this->params);
+		
+		$content = $this->pug->render($this->dir.'/'.$this->template.'.jade', $this->params);
+		
 		if ($return) {
 			return $content;
 		}

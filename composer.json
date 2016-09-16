@@ -29,7 +29,6 @@
 		"codeguy/upload": "*",
 		"wixel/gump": "@stable",
 		"aura/session": "^2.0",
-		
-		"talesoft/tale-jade": "*"
+		"pug-php/pug": "@stable"
 	}
 }
