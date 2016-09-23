@@ -80,7 +80,7 @@ class DataTable extends Table {
 		if (empty($this->fields)) {
 			parent::render();
 		} else {
-			$twig_cache = getcwd() . 'cache/tables/';
+			$twig_cache = getcwd() . '/cache/tables/';
 			$twig_folder = __DIR__ . '/DataTable';
 
 			$params = array(
