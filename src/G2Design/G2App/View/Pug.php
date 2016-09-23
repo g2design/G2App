@@ -37,8 +37,10 @@ class Pug extends \G2Design\G2App\View {
 	}
 
 	function render($return = false) {
-		
-		$content = $this->pug->render($this->dir.'/'.$this->template.'.jade', $this->params);
+		$params = array_merge([
+			'SITEURL' => \G2Design\Utils\Functions::get_current_site_url()
+		],$this->params);
+		$content = $this->pug->render($this->dir.'/'.$this->template.'.jade', $params);
 		
 		if ($return) {
 			return $content;
