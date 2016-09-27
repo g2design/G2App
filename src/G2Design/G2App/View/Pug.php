@@ -2,7 +2,7 @@
 
 namespace G2Design\G2App\View;
 
-//use Tale\Jade;
+use G2Design\G2App\PugGlobal;
 
 class Pug extends \G2Design\G2App\View {
 
@@ -30,17 +30,11 @@ class Pug extends \G2Design\G2App\View {
 
 		$this->dir = $this->get_module_dir($other_module).'Views';
 		
-		$this->pug = new \Pug\Pug([
-			'extension' => ".jade",
-			'basedir' => $this->dir
-		]);
+		$this->pug = PugGlobal::getInstance();
 	}
 
 	function render($return = false) {
-		$params = array_merge([
-			'SITEURL' => \G2Design\Utils\Functions::get_current_site_url()
-		],$this->params);
-		$content = $this->pug->render($this->dir.'/'.$this->template.'.jade', $params);
+		$content = $this->pug->render($this->dir.'/'.$this->template.'.jade', $this->params);
 		
 		if ($return) {
 			return $content;
