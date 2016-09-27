@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "099f4ae09c747e52aab9986ca63241ca",
-    "content-hash": "89cb0411b3a2c0614bc665642994f125",
+    "hash": "2fe6ee31c757cb52efb561e2a087dd6d",
+    "content-hash": "215d3742a309bfd6c862df382a3af2fb",
     "packages": [
         {
             "name": "aura/session",
@@ -186,6 +186,57 @@
             "time": "2016-08-29 20:19:46"
         },
         {
+            "name": "kylekatarnls/sbp",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kylekatarnls/sbp.git",
+                "reference": "4e52aa0a69cb65c71379d8c7f838191f5f3f8ff0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kylekatarnls/sbp/zipball/4e52aa0a69cb65c71379d8c7f838191f5f3f8ff0",
+                "reference": "4e52aa0a69cb65c71379d8c7f838191f5f3f8ff0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "illuminate/support": "4.0.*",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sbp": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "SBP SelfBuild",
+                    "email": "sbp@selfbuild.fr",
+                    "homepage": "http://sbp.selfbuild.fr/"
+                }
+            ],
+            "description": "Shoter Built PHP",
+            "homepage": "https://github.com/kylekatarnls/sbp",
+            "keywords": [
+                "built",
+                "langage",
+                "php",
+                "precompiler",
+                "shorter",
+                "syntaxic sugar"
+            ],
+            "time": "2016-03-11 12:50:24"
+        },
+        {
             "name": "phroute/phroute",
             "version": "v2.1.0",
             "source": {
@@ -305,6 +356,49 @@
                 "template"
             ],
             "time": "2016-08-30 18:14:08"
+        },
+        {
+            "name": "pug-php/pug-filter-sbp",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pug-php/pug-filter-sbp.git",
+                "reference": "012cfc21fa5842e53df4fd4ed7c31bb2d40ac0a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pug-php/pug-filter-sbp/zipball/012cfc21fa5842e53df4fd4ed7c31bb2d40ac0a6",
+                "reference": "012cfc21fa5842e53df4fd4ed7c31bb2d40ac0a6",
+                "shasum": ""
+            },
+            "require": {
+                "kylekatarnls/sbp": "^1.6",
+                "pug-php/pug": "^2.0"
+            },
+            "replace": {
+                "kylekatarnls/jade-filter-sbp": "self.version"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Pug": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Katarn",
+                    "email": "kylekatarnls@gmail.com"
+                }
+            ],
+            "description": "Sbp filter for Jade",
+            "time": "2016-07-26 10:17:49"
         },
         {
             "name": "stwessl/form",
