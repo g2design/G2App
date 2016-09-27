@@ -59,7 +59,7 @@ class Table {
 		$this->functions[] = ['action' => $action, 'label' => $label, 'classes' => $classes];
 	}
 
-	function add_renderer(G2_DataTable_Renderer $renderer){
+	function add_renderer(DataTable\Renderer $renderer){
 		$this->renderers[] = $renderer;
 	}
 	function render_value($field,$value,$data){
