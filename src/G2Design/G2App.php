@@ -37,14 +37,15 @@ class G2App extends ClassStructs\Singleton {
 		error_reporting(E_ERROR | E_WARNING);
 		self::$instance = new self($loader);
 		$reflection = new \ReflectionClass(get_class($loader));
-		define(G2_PROJECT_ROOT, dirname($reflection->getFileName()).'../../');
-		
+		define(G2_PROJECT_ROOT, dirname($reflection->getFileName()) . '../../');
+
 		return self::$instance;
 	}
 
 	function start() {
-		foreach($this->modules as $mod) $mod->init();
-		
+		foreach ($this->modules as $mod)
+			$mod->init();
+
 		$dispatcher = new \Phroute\Phroute\Dispatcher(self::getInstance()->router->getData());
 		$response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], Request::route());
 		echo $response;
@@ -65,10 +66,10 @@ class G2App extends ClassStructs\Singleton {
 	function add_modules($directory) {
 		$dirs = Utils\Functions::directoryToArray($directory, false);
 
+		$classes = [];
 		foreach ($dirs as $dir) {
 			if (is_dir($dir)) {
 				$files = Utils\Functions::directoryToArray($dir, false);
-
 				foreach ($files as $file) {
 					$ext = Utils\Functions::get_extension($file);
 
@@ -79,12 +80,16 @@ class G2App extends ClassStructs\Singleton {
 						$this->loader->add("$class_name", dirname($file));
 
 						$class = "\\$class_name";
-						if (class_exists($class) && is_subclass_of($class, '\G2Design\ClassStructs\Module', true)) {
-							$module = new $class(); /* @var $module ClassStructs\Module */
-							$this->add_module($module);
-						}
+						$classes[] = $class;
 					}
 				}
+			}
+		}
+
+		foreach ($classes as $class) {
+			if (class_exists($class) && is_subclass_of($class, '\G2Design\ClassStructs\Module', true)) {
+				$module = new $class(); /* @var $module ClassStructs\Module */
+				$this->add_module($module);
 			}
 		}
 	}
