@@ -43,7 +43,8 @@ class G2App extends ClassStructs\Singleton {
 	}
 
 	function start() {
-
+		foreach($this->modules as $mod) $mod->init();
+		
 		$dispatcher = new \Phroute\Phroute\Dispatcher(self::getInstance()->router->getData());
 		$response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], Request::route());
 		echo $response;
@@ -56,7 +57,7 @@ class G2App extends ClassStructs\Singleton {
 	function add_module(ClassStructs\Module $module) {
 		$module->connect($this);
 
-		$module->init();
+//		$module->init();
 
 		$this->modules[] = $module;
 	}
