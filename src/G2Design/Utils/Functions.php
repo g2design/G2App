@@ -42,8 +42,10 @@ class Functions {
 		(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? $http = 'https://' : $http = 'http://';
 
 		$final_url = $http . $_SERVER['HTTP_HOST'] . $action_2 . $base . '/';
-		if ($_SERVER['DOCUMENT_ROOT'] == getcwd()) {
+		
+		if ($_SERVER['DOCUMENT_ROOT'] == str_replace('\\', '/', getcwd())) {
 			$final_url = $http . $_SERVER['HTTP_HOST'];
+			
 		}
 
 //	if(getcwd() == CMS_DIR){

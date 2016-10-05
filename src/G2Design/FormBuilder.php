@@ -26,7 +26,7 @@ class FormBuilder {
 			$look_dirs = [$look_dirs];
 		}
 		
-		$twig_cache = getcwd() . 'cache/tables/';
+		$twig_cache = getcwd() . '/cache/forms/';
 		$twig_folder = __DIR__ . '/FormBuilder/templates';
 
 		$params = array(
