@@ -2,7 +2,7 @@
 
 namespace G2Design;
 
-use Phroute\Phroute\RouteCollector;
+use Phroute\Phroute\RouteCollector , Exception;
 
 class G2App extends ClassStructs\Singleton {
 

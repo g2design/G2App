@@ -2,7 +2,7 @@
 
 namespace G2Design\FormBuilder\Field;
 
-class Checkbox extends G2Design\FormBuilder\Field {
+class Checkbox extends \G2Design\FormBuilder\Field {
 	
 	
 	function render($return = true) {

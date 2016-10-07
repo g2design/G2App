@@ -4,7 +4,7 @@ namespace G2Design\FormBuilder;
 use Twig_Environment;
 
 
-class Field implements Field\Int {
+class Field implements Field\FieldInterface {
 
 	var $name, $classes, $label;
 	protected $value;

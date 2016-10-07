@@ -14,8 +14,6 @@ class Controller extends Base {
 
 	public function redirect($loc)
 	{
-		global $config;
-		
 		if(strpos($loc, \G2Design\Utils\Functions::get_current_site_url()) === false) {
 			$loc = \G2Design\Utils\Functions::get_current_site_url() . $loc;
 		}

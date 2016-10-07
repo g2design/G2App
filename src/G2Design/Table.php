@@ -1,7 +1,11 @@
 <?php
+
 namespace G2Design;
 
-use Twig_Environment, Twig_Loader_Filesystem, G2Design\Utils\Functions, G2Design\Database;
+use Twig_Environment,
+	Twig_Loader_Filesystem,
+	G2Design\Utils\Functions,
+	G2Design\Database;
 
 class Table {
 
@@ -22,7 +26,7 @@ class Table {
 		$this->bindings = $bindings;
 	}
 
-	function add_exec_query($sql_query){
+	function add_exec_query($sql_query) {
 		$this->sql_query = $sql_query;
 	}
 
@@ -59,18 +63,19 @@ class Table {
 		$this->functions[] = ['action' => $action, 'label' => $label, 'classes' => $classes];
 	}
 
-	function add_renderer(DataTable\Renderer $renderer){
+	function add_renderer(DataTable\Renderer $renderer) {
 		$this->renderers[] = $renderer;
 	}
-	function render_value($field,$value,$data){
-		foreach($this->renderers as $render) {
-			if($render->field() == $field){
 
-				$value = $render->render($field,$value,$data);
+	function render_value($field, $value, $data) {
+		foreach ($this->renderers as $render) {
+			if ($render->field() == $field) {
+
+				$value = $render->render($field, $value, $data);
 			}
 		}
 
-		return  empty($this->renderers) ? nl2br($value) : $value;
+		return empty($this->renderers) ? nl2br($value) : $value;
 	}
 
 	/**
@@ -135,7 +140,6 @@ class Table {
 			if (in_array($single['condition'], $con_op)) {
 				$field = $single['field'];
 				$cond = $single['condition'];
-				$value = $single['value'];
 
 				if (!is_array($fields) && get_class($fields) == 'RedBeanPHP\OODBBean') {
 					$field_c = $fields->export();
@@ -163,11 +167,9 @@ class Table {
 			'cache' => $twig_cache,
 			'auto_reload' => true,
 			'autoescape' => false,
-//			'debug' => true
 		);
 		$loader = new Twig_Loader_Filesystem($twig_folder);
 		$twig = new Twig_Environment($loader, $params);
-//		var_dump($twig_folder);exit;
 		$current_url = substr(Functions::curPageURL(), 0, strpos(Functions::curPageURL(), '?') !== false ? strpos(Functions::curPageURL(), '?') : strlen(Functions::curPageURL()));
 		$copy = $_GET;
 		unset($copy['p']);
@@ -180,8 +182,8 @@ class Table {
 
 		return $twig->render('table.twig', [
 					'data' => $this->get_resultset(),
-					'pages' => Database::get_last_total_pages() != false ? Mvc_Db::get_last_total_pages() : $this->total_pages,
-					'current' => Database::get_current_page() != false ? Mvc_Db::get_current_page() : $this->current_page,
+					'pages' => Database::get_last_total_pages() != false ? Database::get_last_total_pages() : $this->total_pages,
+					'current' => Database::get_current_page() != false ? Database::get_current_page() : $this->current_page,
 					'headers' => $this->get_headers(),
 					'functions' => $this->get_functions(),
 					'instance' => $this,
@@ -192,9 +194,8 @@ class Table {
 
 	function get_resultset() {
 
-		if(!empty($this->sql_query)){
+		if (!empty($this->sql_query)) {
 			$data = Database::paginate_query($this->sql_query, $this->limit);
-
 		}
 
 		if (!empty($this->data)) {
@@ -225,11 +226,11 @@ class Table {
 	function set_filter($filter) {
 		$this->filter = $filter;
 	}
-	
-	function set_headers($headers){
+
+	function set_headers($headers) {
 		$this->headers = $headers;
 	}
-	
+
 	function get_headers() {
 
 		if (isset($this->headers)) {
@@ -239,7 +240,6 @@ class Table {
 			$first = clone reset($this->data);
 		} else {
 			$first = reset($this->get_resultset());
-
 		}
 		//Filter out all unneeded fields if set
 		if (isset($this->filter) && !empty($this->filter)) {
@@ -247,7 +247,7 @@ class Table {
 		}
 		if (!is_array($first) && $first) {
 			return array_keys($first->export());
-		} else if(is_array($first) && !empty ($first)){
+		} else if (is_array($first) && !empty($first)) {
 			return array_keys($first);
 		} else
 			return [];

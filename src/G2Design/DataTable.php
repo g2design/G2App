@@ -1,7 +1,12 @@
 <?php
+
 namespace G2Design;
 
-use Twig_Environment, Twig_Loader_Filesystem, G2Design\Utils\Functions, G2Design\Database;
+use Twig_Environment,
+	Twig_Loader_Filesystem,
+	G2Design\Utils\Functions,
+	G2Design\Database,
+	Exception;
 
 /**
  * Class improves fields management of table renderer
@@ -126,9 +131,8 @@ class DataTable extends Table {
 			}
 
 			if (isset($field->label)) {
-				if( $field->name == $fieldname ){
+				if ($field->name == $fieldname) {
 					return $field->label;
-
 				}
 			} else {
 				throw new Exception('Expect there to be keys name and label in given array');

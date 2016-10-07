@@ -3,7 +3,7 @@
 namespace G2Design\FormBuilder\Field;
 use Twig_Environment;
 
-interface Int {
+interface FieldInterface {
 	
 	function __construct($fieldname, $classes);
 	function render($return = true);
