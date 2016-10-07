@@ -9,8 +9,14 @@ class Base {
 	 *
 	 * @var Session\Segment
 	 */
-	static $session = null;
-
+	static $session = [];
+	
+	/**
+	 *
+	 * @var Mono 
+	 */
+	static $logger = [];
+	
 	function get_module_dir($module = false) {
 
 		$file_uri = $this->get_running_module_file();
@@ -42,13 +48,32 @@ class Base {
 	 * @return Session\Segment;
 	 */
 	function session() {
-		if(!isset(self::$session)) {
+		$id = get_class($this->get_module_instance());
+		if(!isset(self::$session[$id])) {
 			$factory = new Session\SessionFactory();
 			$session = $factory->newInstance($_COOKIE);
-			self::$session = $session->getSegment(get_class($this->get_module_instance()));
+			self::$session[$id] = $session->getSegment($id);
 		}
 		
-		return self::$session;
+		return self::$session[$id];
+	}
+	
+	/**
+	 * 
+	 * @staticvar type $logger
+	 * @return \Monolog\Logger
+	 */
+	function logger() {
+		static $logger = null;
+		$id = get_class($this->get_module_instance());
+		if(!isset(self::$logger[$id])) {
+			$logger = new \Monolog\Logger($id);
+			$logger->pushHandler(new \Monolog\Handler\ChromePHPHandler());
+			\Monolog\ErrorHandler::register($logger);
+			self::$logger[$id] = $logger;
+		}
+		
+		return self::$logger[$id];
 	}
 
 }
