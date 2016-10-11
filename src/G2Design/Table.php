@@ -180,8 +180,8 @@ class Table {
 
 		return $twig->render('table.twig', [
 					'data' => $this->get_resultset(),
-					'pages' => Database::get_last_total_pages() != false ? Mvc_Db::get_last_total_pages() : $this->total_pages,
-					'current' => Database::get_current_page() != false ? Mvc_Db::get_current_page() : $this->current_page,
+					'pages' => Database::get_last_total_pages() != false ? Database::get_last_total_pages() : $this->total_pages,
+					'current' => Database::get_current_page() != false ? Database::get_current_page() : $this->current_page,
 					'headers' => $this->get_headers(),
 					'functions' => $this->get_functions(),
 					'instance' => $this,

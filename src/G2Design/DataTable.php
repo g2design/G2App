@@ -1,7 +1,11 @@
 <?php
+
 namespace G2Design;
 
-use Twig_Environment, Twig_Loader_Filesystem, G2Design\Utils\Functions, G2Design\Database;
+use Twig_Environment,
+	Twig_Loader_Filesystem,
+	G2Design\Utils\Functions,
+	G2Design\Database;
 
 /**
  * Class improves fields management of table renderer
@@ -23,6 +27,19 @@ class DataTable extends Table {
 	 */
 	function set_fields($fields) {
 		$this->fields = $fields;
+	}
+
+	function default_fields() {
+		$data = $this->get_resultset();
+		$fields = current($data);
+		$final = array();
+		if($fields) {
+		
+			foreach ($fields as $key => $value) {
+				$final[] = array('label' => $key, 'name' => $key);
+			}
+		}
+		return $final;
 	}
 
 //	public function get_resultset() {
@@ -126,9 +143,8 @@ class DataTable extends Table {
 			}
 
 			if (isset($field->label)) {
-				if( $field->name == $fieldname ){
+				if ($field->name == $fieldname) {
 					return $field->label;
-
 				}
 			} else {
 				throw new Exception('Expect there to be keys name and label in given array');
