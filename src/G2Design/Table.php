@@ -123,7 +123,8 @@ class Table {
 		}
 		$anchor = "<a href=\"$action\" class=\" btn " . implode(' ', $function['classes']) . "\">{$function['label']}</a>";
 		return $anchor;
-	}
+	} 
+	
 
 	private function test_conditions($fields, $conditions) {
 		
