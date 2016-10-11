@@ -1,6 +1,7 @@
 {
 	
 	"name": "g2design/g2app",
+	"description" : "A small PHP framework",
 	"authors": [
         {
             "name": "Stephan Wessels",

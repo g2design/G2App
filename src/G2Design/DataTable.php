@@ -5,7 +5,8 @@ namespace G2Design;
 use Twig_Environment,
 	Twig_Loader_Filesystem,
 	G2Design\Utils\Functions,
-	G2Design\Database;
+	G2Design\Database,
+	Exception;
 
 /**
  * Class improves fields management of table renderer
