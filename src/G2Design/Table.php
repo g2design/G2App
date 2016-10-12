@@ -42,6 +42,15 @@ class Table {
 			throw new Exception('Array expected as argument $data');
 		}
 	}
+	
+	function append_data($data, $limit) {
+		if (is_array($data)) {
+			$this->data = array_merge($this->data, $data);
+			$this->limit = $limit;
+		} else {
+			throw new Exception('Array expected as argument $data');
+		}
+	}
 
 	function set_page_limit($limit) {
 		$this->limit = $limit;
@@ -123,8 +132,7 @@ class Table {
 		}
 		$anchor = "<a href=\"$action\" class=\" btn " . implode(' ', $function['classes']) . "\">{$function['label']}</a>";
 		return $anchor;
-	} 
-	
+	}
 
 	private function test_conditions($fields, $conditions) {
 		
@@ -272,10 +280,10 @@ class Table {
 		if (isset($this->headers)) {
 			return $this->headers;
 		}
-		if (isset($this->data)) {
+		if (isset($this->data) && !empty($this->data)) {
 			$first = clone reset($this->data);
 		} else {
-			$first = reset($this->get_resultset());
+			$first = @reset($this->get_resultset());
 		}
 		//Filter out all unneeded fields if set
 		if (isset($this->filter) && !empty($this->filter)) {

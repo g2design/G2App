@@ -32,10 +32,12 @@ class DataTable extends Table {
 
 	function default_fields() {
 		$data = $this->get_resultset();
-		$fields = current($data);
 		$final = array();
+		if (empty($data)) {
+			return $final;
+		}
+		$fields = current($data);
 		if($fields) {
-		
 			foreach ($fields as $key => $value) {
 				$final[] = array('label' => $key, 'name' => $key);
 			}
