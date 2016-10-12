@@ -8,7 +8,7 @@ class G2App extends ClassStructs\Singleton {
 
 	private static $instance = null;
 	var $loader = null;
-
+	private static $preregisterd = [];
 	/**
 	 *
 	 * @var RouteCollector
@@ -38,8 +38,21 @@ class G2App extends ClassStructs\Singleton {
 		self::$instance = new self($loader);
 		$reflection = new \ReflectionClass(get_class($loader));
 		define(G2_PROJECT_ROOT, dirname($reflection->getFileName()) . '../../');
-
+		
+		// Register Modules loaded with pre register function
+		foreach(self::$preregisterd as $dir) {
+			self::$instance->add_modules($dir);
+		}
+		
 		return self::$instance;
+	}
+	
+	/**
+	 * Pre Registers directory for inclusion into module load
+	 * @param type $dir
+	 */
+	public static function register_modules_dir($dir) {
+		self::$preregisterd[] = $dir;
 	}
 
 	function start() {
