@@ -39,7 +39,7 @@ class Table {
 			$this->data = $data;
 			$this->limit = $limit;
 		} else {
-			throw new Exception('Array expected as argument $data');
+			throw new \Exception('Array expected as argument $data');
 		}
 	}
 	
