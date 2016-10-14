@@ -30,9 +30,15 @@ class Database extends R {
 				}
 				
 				self::addDatabase($config->name, 'sqlite:'. $config->file );
-				self::selectDatabase($config->name);
 				break;
+			case "mysql":
+				self::addDatabase($config->name, "mysql:host=$config->host;dbname=$config->database", $config->username, $config->password);
+				
 			
+		}
+		
+		if(isset($config->default)) {
+			self::selectDatabase($config->name);
 		}
 	}
 	
