@@ -15,7 +15,7 @@ use Twig_Environment,
  */
 class DataTable extends Table {
 
-	var $fields;
+	var $fields, $tb_functions = [], $classes = '';
 
 	/**
 	 * Sets the fields in the correct form
@@ -133,9 +133,25 @@ class DataTable extends Table {
 						'functions' => $this->get_functions(),
 						'instance' => $this,
 						'get_con' => $get_con,
-						'current_url' => $current_url
+						'current_url' => $current_url,
+						'table_functions' => $this->tb_functions(),
+						'classes' => $this->classes
 			]);
 		}
+	}
+	
+	function add_table_function($label, $closure) {
+		//Generate a link for this function
+		$key = 'table-function-'.md5($label);
+		$this->tb_functions[$key] = ['label' => $label, 'key' => $key];
+		
+		if(isset($_GET[$key])) {
+			$closure($this, $this->get_full_resultset());
+		}
+	}
+	
+	function tb_functions(){
+		return $this->tb_functions;
 	}
 
 	function get_label($fieldname) {

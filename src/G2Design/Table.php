@@ -262,6 +262,24 @@ class Table {
 
 		return $data;
 	}
+	
+	function get_full_resultset() {
+		if (!empty($this->sql_query)) {
+			$data = Database::getAll($this->sql_query);
+		}
+
+		if (!empty($this->data)) {
+			return $this->data;
+		}
+
+		if (!empty($this->type)) {
+
+			$data = Database::findAll($this->type, $this->sql, $this->bindings);
+		}
+
+
+		return $data;
+	}
 
 	function get_count() {
 		return Database::get_last_total_pages();
