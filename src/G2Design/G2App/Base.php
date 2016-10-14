@@ -48,7 +48,7 @@ class Base {
 	 * @return Session\Segment;
 	 */
 	function session() {
-		$id = get_class($this->get_module_instance());
+		$id = getcwd();
 		if(!isset(self::$session[$id])) {
 			$factory = new Session\SessionFactory();
 			$session = $factory->newInstance($_COOKIE);
