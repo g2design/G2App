@@ -30,8 +30,23 @@ class DataTable extends Table {
 		$this->fields = $fields;
 	}
 
-	function add_field($field) {
-		array_push($this->fields, $field);
+	/**
+	 * append another field
+	 * 
+	 * @param type $field The field or an array
+	 * @param type $label The Label
+	 * @return type
+	 */
+	function add_field($field , $label = false) {
+		if(is_array($field)) {
+			array_push($this->fields, $field);
+			return;
+		}
+		if(is_string($field)) {
+			$fieldar = ['name' => $field, 'label' => $label ? $label : $field];
+			array_push($this->fields, $fieldar);
+		}
+		
 	}
 
 	function default_fields() {
