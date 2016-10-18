@@ -30,6 +30,10 @@ class DataTable extends Table {
 		$this->fields = $fields;
 	}
 
+	function add_field($field) {
+		array_push($this->fields, $field);
+	}
+
 	function default_fields() {
 		$data = $this->get_resultset();
 		$final = array();
@@ -37,7 +41,7 @@ class DataTable extends Table {
 			return $final;
 		}
 		$fields = current($data);
-		if($fields) {
+		if ($fields) {
 			foreach ($fields as $key => $value) {
 				$final[] = array('label' => $key, 'name' => $key);
 			}
