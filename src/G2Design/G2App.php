@@ -2,13 +2,15 @@
 
 namespace G2Design;
 
-use Phroute\Phroute\RouteCollector , Exception;
+use Phroute\Phroute\RouteCollector,
+	Exception;
 
 class G2App extends ClassStructs\Singleton {
 
 	private static $instance = null;
 	var $loader = null;
 	private static $preregisterd = [];
+
 	/**
 	 *
 	 * @var RouteCollector
@@ -38,15 +40,15 @@ class G2App extends ClassStructs\Singleton {
 		self::$instance = new self($loader);
 		$reflection = new \ReflectionClass(get_class($loader));
 		define(G2_PROJECT_ROOT, dirname($reflection->getFileName()) . '../../');
-		
+
 		// Register Modules loaded with pre register function
-		foreach(self::$preregisterd as $dir) {
+		foreach (self::$preregisterd as $dir) {
 			self::$instance->add_modules($dir);
 		}
-		
+
 		return self::$instance;
 	}
-	
+
 	/**
 	 * Pre Registers directory for inclusion into module load
 	 * @param type $dir
@@ -60,7 +62,20 @@ class G2App extends ClassStructs\Singleton {
 			$mod->init();
 
 		$dispatcher = new \Phroute\Phroute\Dispatcher(self::getInstance()->router->getData());
-		$response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], Request::route());
+		try {
+			$response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], Request::route());
+		} catch (\Phroute\Phroute\Exception\HttpRouteNotFoundException $ex) {
+			http_response_code(404);
+			echo "
+			<h1>404 page does not exist</h1>
+			";
+		} catch (\Phroute\Phroute\Exception\HttpMethodNotAllowedException $ex) {
+			http_response_code(405);
+			echo "
+			<h1>405 Method not allowed</h1>
+			";
+		}
+
 		echo $response;
 	}
 
