@@ -130,6 +130,7 @@ class Table {
 		foreach ($fields as $key => $value) {
 			$action = str_replace("[$key]", $value, $action);
 		}
+		$anchor = "<a href=\"$action\" class=\"btn " . implode(' ', $function['classes']) . "\">{$function['label']}</a>";
 		return $anchor;
 	}
 
