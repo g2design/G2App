@@ -29,10 +29,6 @@ class DataTable extends Table {
 	function set_fields($fields) {
 		$this->fields = $fields;
 	}
-	
-	function add_field($field){
-		array_push($this->fields, $field);
-	}
 
 	function add_field($field) {
 		array_push($this->fields, $field);
