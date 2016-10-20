@@ -1,68 +1,73 @@
 <div class="panel">
-	<table class="table {{ classes }} ">
-		<thead>
-			<tr>
-				{% if functions %}
-				<th></th>
-				{% endif %}
-				{% for heading in headers %}
-				<th>{{ instance.get_label(heading) | capitalize }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		{% if table_functions %}
-			<tfoot>
-				<tr>
-					<td colspan="{{ headers | length  }}" class="text-xs-right" >
-						<div class="buttons">
-							
-							{% for func in table_functions %}
-								<a href="{{ current_url }}{{get_con}}{{func.key}}" class="btn btn-default">{{ func.label }}</a>
-							{% endfor %}
-							
-						</div>
-					</td>
-				</tr>
-			</tfoot>
-		{% endif %}
-		<tbody>
-			{% if data %}
-			{% for dataset in data %}
-			<tr>
-				{% if functions %}
-				<td>
-					{#{% for function in functions %}
-					<a href="{{function.action}}/ {{ dataset.id }}" class="btn {{function.classes}}">{{ function.label }}</a>#}
-					{{ instance.render_functions(dataset)}}
-					{#{% endfor %}#}
-				</td>
+    <table class="table {{ classes }} ">
+	<thead>
+	    <tr>
+		{% if functions %}
+		    <th></th>
+		    {% endif %}
+		    {% for heading in headers %}
+		    <th>{{ instance.get_label(heading) | capitalize }}</th>
+		    {% endfor %}
+	    </tr>
+	</thead>
+	{% set cols = headers | length %}
+	{% if functions %}
+	    {% set cols = cols +1 %} 
+	{% endif %}
+	{% if table_functions %}
+	    <tfoot>
+		<tr>    
 
-				{% endif %}
-				{% for field in headers %}
-				<td>{{ instance.render_value(field,dataset[field] ,dataset)}}</td>
-				{% endfor %}
+		    <td colspan="{{ cols  }}" class="text-xs-right" >
+			<div class="buttons">
 
-			</tr>
+			    {% for func in table_functions %}
+				<a href="{{ current_url }}{{get_con}}{{func.key}}" class="btn btn-default">{{ func.label }}</a>
+			    {% endfor %}
+
+			</div>
+		    </td>
+		</tr>
+	    </tfoot>
+	{% endif %}
+	<tbody>
+	    {% if data %}
+		{% for dataset in data %}
+		    <tr>
+			{% if functions %}
+			    <td>
+				{#{% for function in functions %}
+				<a href="{{function.action}}/ {{ dataset.id }}" class="btn {{function.classes}}">{{ function.label }}</a>#}
+				{{ instance.render_functions(dataset)}}
+				{#{% endfor %}#}
+			    </td>
+
+			{% endif %}
+			{% for field in headers %}
+			    <td>{{ instance.render_value(field,dataset[field] ,dataset)}}</td>
 			{% endfor %}
-			{% else %}
-			<tr>
-				<td colspan="{{ headers | length }}" class="text-center">
-					Sorry no results found
-				</td>
-			</tr>
-			{% endif%}
-		</tbody>
-		
-	</table>
+
+		    </tr>
+		{% endfor %}
+	    {% else %}
+		<tr>
+		    <td colspan="{{ cols }}" class="text-center">
+			Sorry no results found
+		    </td>
+		</tr>
+	    {% endif%}
+	</tbody>
+
+    </table>
 </div>
 {% if pages > 1 %}
-<div class="panel-footer"><ul class="pagination">
-			{% for i in 1..pages %}
+    <div class="panel-footer"><ul class="pagination">
+	    {% for i in 1..pages %}
 		<li {% if i == current %} class='active' {% endif %} ><a href="{{ current_url }}{{get_con}}p={{ i }}">{{ i }}</a></li>
-			{% endfor %}
+		{% endfor %}
 	</ul>
-</div>
+    </div>
 
-{#{{ current_url }}#}
+    {#{{ current_url }}#}
 
 {% endif %}
