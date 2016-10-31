@@ -24,7 +24,7 @@ class View extends Base {
 		if(!is_dir(dirname($conf['cache']))) mkdir(dirname ($conf['cache']), 0777, true);
 
 		//Load twig filesystem
-		$loader = new \Twig_Loader_Filesystem( $this->get_module_dir($other_module).'/Views');
+		$loader = new \Twig_Loader_Filesystem( $this->__module_dir($other_module).'/Views');
 		$this->twig = new \Twig_Environment($loader, array(
 			'cache' => $conf['cache'],
 			'auto_reload' => true,

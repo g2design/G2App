@@ -28,7 +28,7 @@ class Pug extends \G2Design\G2App\View {
 		if (!is_dir(dirname($conf['cache'])))
 			mkdir(dirname($conf['cache']), 0777, true);
 
-		$this->dir = $this->get_module_dir($other_module).'Views';
+		$this->dir = $this->__module_dir($other_module).'Views';
 		
 		$this->pug = PugGlobal::getInstance();
 	}

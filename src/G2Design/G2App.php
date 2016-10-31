@@ -122,7 +122,7 @@ class G2App extends ClassStructs\Singleton {
 		}
 	}
 
-	static function get_module_instance($file) {
+	static function __module_instance($file) {
 		$instance = self::getInstance();
 		if ($instance) {
 			foreach ($instance->modules as $module) { /* @var $module ClassStructs\Module */
@@ -137,7 +137,7 @@ class G2App extends ClassStructs\Singleton {
 		}
 	}
 
-	static function get_module_dir($file) {
+	static function __module_dir($file) {
 		$instance = self::getInstance();
 		if ($instance) {
 			foreach ($instance->modules as $module) { /* @var $module ClassStructs\Module */

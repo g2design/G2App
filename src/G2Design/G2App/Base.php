@@ -17,20 +17,20 @@ class Base {
 	 */
 	static $logger = [];
 	
-	function get_module_dir($module = false) {
+	function __module_dir($module = false) {
 
-		$file_uri = $this->get_running_module_file();
+		$file_uri = $this->__running_module_file();
 
-		return \G2Design\G2App::get_module_dir($file_uri).'/';
+		return \G2Design\G2App::__module_dir($file_uri).'/';
 		
 	}
 	
-	function get_running_module_file() {
+	function __running_module_file() {
 		$t = debug_backtrace();
 		$file_uri = $t[0]['file'];
 		foreach ($t as $row) {
 			$file = $row['file'] . '<br>';
-			if (strpos($file, \G2Design\G2App::get_module_dir($file)) !== false) {
+			if (strpos($file, \G2Design\G2App::__module_dir($file)) !== false) {
 				$file_uri = $file;
 				break;
 			}
@@ -39,8 +39,8 @@ class Base {
 		return $file_uri;
 	}
 	
-	function get_module_instance() {
-		return \G2Design\G2App::get_module_instance($this->get_running_module_file());
+	function __module_instance() {
+		return \G2Design\G2App::__module_instance($this->__running_module_file());
 	}
 	
 	/**
@@ -65,7 +65,7 @@ class Base {
 	 */
 	function logger() {
 		static $logger = null;
-		$id = get_class($this->get_module_instance());
+		$id = get_class($this->__module_instance());
 		if(!isset(self::$logger[$id])) {
 			$logger = new \Monolog\Logger($id);
 			$logger->pushHandler(new \Monolog\Handler\ChromePHPHandler());
