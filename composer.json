@@ -1,24 +1,24 @@
 {
-	
+
 	"name": "g2design/g2app",
-	"description" : "A small PHP framework",
+	"description": "A small PHP framework",
 	"authors": [
-        {
-            "name": "Stephan Wessels",
+		{
+			"name": "Stephan Wessels",
 			"email": "stwessl@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-0": {
-            "G2Design": "src/"
-        }
-    },
+		}
+	],
+	"autoload": {
+		"psr-0": {
+			"G2Design": "src/"
+		}
+	},
 
 	"extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    },
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	},
 	"require": {
 		"phroute/phroute": "dev-master",
 		"yeriomin/redbean-single-file": "^4.3",
@@ -33,5 +33,12 @@
 		"pug-php/pug": "@stable",
 		"pug-php/pug-filter-sbp": "^1.2",
 		"monolog/monolog": "^1.21"
-	}
+	},
+
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/StephanAtG2/phroute"
+		}
+	]
 }
