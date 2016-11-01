@@ -60,7 +60,7 @@ class G2App extends ClassStructs\Singleton {
 	function start() {
 		foreach ($this->modules as $mod)
 			$mod->init();
-
+		
 		$dispatcher = new \Phroute\Phroute\Dispatcher(self::getInstance()->router->getData());
 		try {
 			$response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], Request::route());
