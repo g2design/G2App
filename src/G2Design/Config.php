@@ -27,14 +27,14 @@ class Config extends ClassStructs\Singleton {
 			} else if (is_string($enviroment)) {
 				throw new Exception("String was provide in configuration file. But is not a valid file");
 			}
-			$in->config->merge($enviroment);
+			$in->config = $in->config->merge($enviroment);
 		}
 		
 	}
 
 	/**
 	 * 
-	 * @return \Zend\Config
+	 * @return \Zend\Config\Config
 	 */
 	static function get() {
 		$in = self::getInstance();
