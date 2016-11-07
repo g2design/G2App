@@ -36,7 +36,7 @@ class G2App extends ClassStructs\Singleton {
 	 * @return G2App
 	 */
 	public static function init(\Composer\Autoload\ClassLoader $loader) {
-		error_reporting(E_ERROR | E_WARNING);
+		error_reporting(E_ERROR);
 		self::$instance = new self($loader);
 		$reflection = new \ReflectionClass(get_class($loader));
 		define(G2_PROJECT_ROOT, dirname($reflection->getFileName()) . '../../');
