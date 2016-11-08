@@ -42,7 +42,7 @@ class Table {
 			throw new \Exception('Array expected as argument $data');
 		}
 	}
-	
+
 	function append_data($data, $limit) {
 		if (is_array($data)) {
 			$this->data = array_merge($this->data, $data);
@@ -69,6 +69,7 @@ class Table {
 	 * @param type $classes
 	 */
 	function add_function($action, $label, $classes = []) {
+
 		$this->functions[] = ['action' => $action, 'label' => $label, 'classes' => $classes];
 	}
 
@@ -120,47 +121,69 @@ class Table {
 					continue;
 				}
 			}
+
 			$f_string .= $this->generate_function($function, $fields);
 		}
 		return $f_string;
 	}
 
 	private function generate_function($function, $fields) {
+
 		$action = $function['action'];
-		foreach ($fields as $key => $value) {
-			$action = str_replace("[$key]", $value, $action);
+		if (is_string($action)) {
+			foreach ($fields as $key => $value) {
+
+				$action = str_replace("[$key]", $value, $action);
+			}
 		}
+
+		if (is_callable($action)) { //Create a GET key for givin row
+			$call = $action;
+			$key = md5(implode('', $fields));
+			if ($_GET['row-func'] == $key) {
+				$call($fields);
+			}
+
+
+
+			$_GET['row-func'] = $key;
+			$action = "?";
+			foreach ($_GET as $field => $value)
+				$action .= "$field=$value&";
+			$action = rtrim($action, '&');
+			$action = Request::route().$action;
+		}
+
 		$anchor = "<a href=\"$action\" class=\"btn " . implode(' ', $function['classes']) . "\">{$function['label']}</a>";
 		return $anchor;
 	}
 
 	private function test_conditions($fields, $conditions) {
-		
+
 		if (!is_array(reset($conditions))) {
 			$conditions = [$conditions];
 		}
-		
+
 		$approved = false;
 		$con_op = [
 			'==', '>', '>=', '!=', '!==', '<', '<='
 		];
 		$results = [];
-		
+
 		foreach ($conditions as $single) { // Or Condition by default
-			
 			// test that the conditional operator is allowed
 			if (in_array($single['condition'], $con_op)) {
-				
+
 				$field = $single['field'];
 				$cond = $single['condition'];
 				$value = $single['value'];
 				$type = $single['type'] ? $single['type'] : 'or';
-				
+
 				if (!is_array($fields) && get_class($fields) == 'RedBeanPHP\OODBBean') {
 					$field_c = $fields->export();
 				} else
 					$field_c = $fields;
-				
+
 				switch ($cond) {
 					case '==' :
 						$result = $fields[$field] == $value;
@@ -182,24 +205,23 @@ class Table {
 						$result = $fields[$field] <= $value;
 						break;
 				}
-				
+
 				$results[] = $result ? 'true' : 'false';
-				
-				if(!(end($conditions) == $single)) { // if this is not the last condition
+
+				if (!(end($conditions) == $single)) { // if this is not the last condition
 					$results[] = $type == 'and' ? '&&' : $type;
 				}
 			} else {
 				continue;
 			}
-			
 		}
-		
-		@eval('$approved = '.implode(' ', $results).';');
-		
-		if(!isset($approved)) {
+
+		@eval('$approved = ' . implode(' ', $results) . ';');
+
+		if (!isset($approved)) {
 			return false;
 		}
-		
+
 		return $approved;
 	}
 
@@ -262,7 +284,7 @@ class Table {
 
 		return $data;
 	}
-	
+
 	function get_full_resultset() {
 		if (!empty($this->sql_query)) {
 			$data = Database::getAll($this->sql_query);
