@@ -38,14 +38,14 @@ class DataTable extends Table {
 	 * @return type
 	 */
 	function add_field($field , $label = false) {
-		if(is_array($field)) {
-			array_push($this->fields, $field);
-			return;
-		}
+		
+		$this->fields = $this->fields != null ? $this->fields : [];
+		
 		if(is_string($field)) {
-			$fieldar = ['name' => $field, 'label' => $label ? $label : $field];
-			array_push($this->fields, $fieldar);
+			$field = ['name' => $field, 'label' => $label ? $label : $field];
 		}
+		
+		array_push($this->fields, $field);
 		
 	}
 
