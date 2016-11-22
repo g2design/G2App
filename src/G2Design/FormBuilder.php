@@ -86,6 +86,10 @@ class FormBuilder {
 		return $form;
 	}
 	
+	public function set_submit_text($text){
+		$this->submit_text = $text;
+	}
+	
 	/**
 	 * Return the html binder
 	 * 
