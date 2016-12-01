@@ -69,7 +69,7 @@ class Base {
 		if(!isset(self::$logger[$id])) {
 			$logger = new \Monolog\Logger($id);
 			$logger->pushHandler(new \Monolog\Handler\ChromePHPHandler());
-			\Monolog\ErrorHandler::register($logger);
+			\Monolog\ErrorHandler::register($logger, [\Psr\Log\LogLevel::ERROR, \Psr\Log\LogLevel::WARNING], [\Psr\Log\LogLevel::ERROR]);
 			self::$logger[$id] = $logger;
 		}
 		
