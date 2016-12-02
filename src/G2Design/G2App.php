@@ -36,7 +36,7 @@ class G2App extends ClassStructs\Singleton {
 	 * @return G2App
 	 */
 	public static function init(\Composer\Autoload\ClassLoader $loader) {
-		error_reporting(E_ERROR);
+
 		self::$instance = new self($loader);
 		$reflection = new \ReflectionClass(get_class($loader));
 		define(G2_PROJECT_ROOT, dirname($reflection->getFileName()) . '../../');
@@ -60,7 +60,7 @@ class G2App extends ClassStructs\Singleton {
 	function start() {
 		foreach ($this->modules as $mod)
 			$mod->init();
-		
+
 		$dispatcher = new \Phroute\Phroute\Dispatcher(self::getInstance()->router->getData());
 		try {
 			$response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], Request::route());
@@ -154,6 +154,37 @@ class G2App extends ClassStructs\Singleton {
 
 	function defaultController($controller) {
 		$this->router->controller('/', $controller);
+	}
+
+	/**
+	 * Instead of using start. Run Actions
+	 */
+	function cron_run($runall = false) { //
+		$jobby = new \Jobby\Jobby();
+
+		foreach ($this->modules as $mod) {
+			if (method_exists($mod, 'get_crons')) { /* @var $mod ClassStructs\Module */
+				$crons = $mod->get_crons();
+
+				foreach ($crons as $cron) { /* @var $cron \G2Design\G2App\Cron */
+					$jobby->add($cron->name, array_merge([
+						'closure' => $cron->run(),
+						'output' => $cron->output ? $cron->output : 'logs/command.log',
+						'schedule' => $cron->schedule,
+						// You can turn off a job by setting 'enabled' to false
+						'enabled' => true,
+						'debug' => true
+					], $cron->params));
+					
+					if($runall){
+						$func = $cron->run();
+						$func();
+					}
+				}
+			}
+		}
+
+		$jobby->run();
 	}
 
 }

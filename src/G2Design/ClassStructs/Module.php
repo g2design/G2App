@@ -5,6 +5,7 @@ use ReflectionClass;
 
 abstract class Module extends \G2Design\G2App\Base {
 	var $app=  null, $controllers = [];
+	protected $registered_crons = [];
 
 	abstract function init();
 	function connect(\G2Design\G2App $app){
@@ -61,5 +62,19 @@ abstract class Module extends \G2Design\G2App\Base {
 			}
 			
 		}
+	}
+	
+	
+	/**
+	 * Register a cronjob
+	 * 
+	 * @param \G2Design\G2App\Cron $cron
+	 */
+	function add_cron(\G2Design\G2App\Cron $cron) {
+		$this->registered_crons[] = $cron;
+	}
+	
+	function get_crons() {
+		return $this->registered_crons;
 	}
 }
