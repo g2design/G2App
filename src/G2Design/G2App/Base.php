@@ -16,7 +16,10 @@ class Base {
 	 * @var Mono 
 	 */
 	static $logger = [];
+	static $session_manager = null;
 	
+	var $session_key = null;
+
 	function __module_dir($module = false) {
 
 		$file_uri = $this->__running_module_file();
@@ -48,14 +51,24 @@ class Base {
 	 * @return Session\Segment;
 	 */
 	function session() {
-		$id = getcwd();
+		$id = $this->session_key != null ? $this->session_key : getcwd();
+		
 		if(!isset(self::$session[$id])) {
 			$factory = new Session\SessionFactory();
 			$session = $factory->newInstance($_COOKIE);
+			self::$session_manager = $session;
 			self::$session[$id] = $session->getSegment($id);
 		}
 		
 		return self::$session[$id];
+	}
+	
+	/**
+	 * 
+	 * @return Aura\Session\Session
+	 */
+	function session_manager() {
+		return self::$session_manager != null ? self::$session_manager : false;
 	}
 	
 	/**

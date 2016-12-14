@@ -174,9 +174,9 @@ class G2App extends ClassStructs\Singleton {
 						// You can turn off a job by setting 'enabled' to false
 						'enabled' => true,
 						'debug' => true
-					], $cron->params));
-					
-					if($runall){
+									], $cron->params));
+
+					if ($runall) {
 						$func = $cron->run();
 						$func();
 					}
