@@ -31,7 +31,6 @@
 		"wixel/gump": "@stable",
 		"aura/session": "^2.0",
 		"pug-php/pug": "@stable",
-		"pug-php/pug-filter-sbp": "^1.2",
 		"monolog/monolog": "^1.21",
 		"hellogerard/jobby": "^3.2"
 	},
