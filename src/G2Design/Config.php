@@ -36,7 +36,7 @@ class Config extends ClassStructs\Singleton {
 	 * 
 	 * @return \Zend\Config\Config
 	 */
-	static function get() {
+	static function &get() {
 		$in = self::getInstance();
 		return $in->config;
 	}

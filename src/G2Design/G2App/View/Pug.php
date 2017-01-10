@@ -43,12 +43,4 @@ class Pug extends \G2Design\G2App\View {
 		echo $content;
 	}
 
-	public function __set($name, $value) {
-		$this->params[$name] = $value;
-	}
-
-	public function __get($var) {
-		return $this->params[$var];
-	}
-
 }

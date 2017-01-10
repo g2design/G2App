@@ -34,6 +34,11 @@ class View extends Base {
 		
 	}
 	
+	public static function getInstance($template, $other_module = false) {
+		$class= get_called_class();
+		return new $class($template, $other_module);
+	}
+	
 	function render($return = false){
 		$content = $this->twig->render($this->template.".twig",$this->params);
 		if($return) {
@@ -50,5 +55,10 @@ class View extends Base {
 	
 	public function __get($var) {
 		return $this->params[$var];
+	}
+	
+	public function set($name, $value) {
+		$this->params[$name] = $value;
+		return $this;
 	}
 }
