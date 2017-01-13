@@ -73,7 +73,11 @@ class Table {
 		$this->functions[] = ['action' => $action, 'label' => $label, 'classes' => $classes];
 	}
 
-	function add_renderer(DataTable\Renderer $renderer) {
+	function add_renderer(DataTable\Renderer $renderer, $field = false) {
+		if($field) {
+			$renderer = clone $renderer;
+			$renderer->field = $field;
+		}
 		$this->renderers[] = $renderer;
 	}
 
