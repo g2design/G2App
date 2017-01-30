@@ -5,6 +5,8 @@ namespace G2Design;
 use Phroute\Phroute\RouteCollector,
 	Exception;
 
+define( 'REDBEAN_MODEL_PREFIX', '\\Model\\' );
+
 class G2App extends ClassStructs\Singleton {
 
 	private static $instance = null;
