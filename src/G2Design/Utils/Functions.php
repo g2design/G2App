@@ -47,13 +47,15 @@ class Functions {
 			$final_url = $http . $_SERVER['HTTP_HOST'];
 			
 		}
-
-//	if(getcwd() == CMS_DIR){
-//		$final_url = str_replace('/'.basename(CMS_DIR), '', $final_url);
-//	}
+		
+		$new_url[] = $http . $_SERVER['HTTP_HOST'];
+		$new_url[] = \G2Design\Request::folder();
+		$final_url = implode('/', $new_url);
+		
 		if (defined('OVERWRITE_SITEURL')) {
 			return OVERWRITE_SITEURL;
 		}
+		
 		if (!self::endsWith($final_url, '/')) {
 			$final_url = $final_url . '/';
 		}
