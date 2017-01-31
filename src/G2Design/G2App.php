@@ -5,6 +5,8 @@ namespace G2Design;
 use Phroute\Phroute\RouteCollector,
 	Exception;
 
+define( 'REDBEAN_MODEL_PREFIX', '\\Model\\' );
+
 class G2App extends ClassStructs\Singleton {
 
 	private static $instance = null;
@@ -39,7 +41,7 @@ class G2App extends ClassStructs\Singleton {
 
 		self::$instance = new self($loader);
 		$reflection = new \ReflectionClass(get_class($loader));
-		define('G2_PROJECT_ROOT', dirname($reflection->getFileName()) . '../../');
+		define('G2_PROJECT_ROOT', dirname($reflection->getFileName()) . '/../../');
 		define('DOCUMENT_ROOT', getcwd());
 
 		// Register Modules loaded with pre register function
