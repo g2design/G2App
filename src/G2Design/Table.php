@@ -80,6 +80,14 @@ class Table {
 		}
 		$this->renderers[] = $renderer;
 	}
+	
+	function &render_field($field, callable $function) {
+		$renderer = new DataTable\Renderer($field);
+		$renderer->set_function($function);
+		
+		$this->add_renderer($renderer);
+		return $this;
+	}
 
 	function render_value($field, $value, $data) {
 		foreach ($this->renderers as $render) {
