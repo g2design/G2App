@@ -42,20 +42,19 @@ class Functions {
 		(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? $http = 'https://' : $http = 'http://';
 
 		$final_url = $http . $_SERVER['HTTP_HOST'] . $action_2 . $base . '/';
-		
+
 		if ($_SERVER['DOCUMENT_ROOT'] == str_replace('\\', '/', getcwd())) {
 			$final_url = $http . $_SERVER['HTTP_HOST'];
-			
 		}
-		
+
 		$new_url[] = $http . $_SERVER['HTTP_HOST'];
 		$new_url[] = \G2Design\Request::folder();
 		$final_url = implode('/', $new_url);
-		
+
 		if (defined('OVERWRITE_SITEURL')) {
 			return OVERWRITE_SITEURL;
 		}
-		
+
 		if (!self::endsWith($final_url, '/')) {
 			$final_url = $final_url . '/';
 		}
@@ -169,7 +168,7 @@ class Functions {
 			array_push($aryRange, date('Y-m-d', $iDateFrom)); // first entry
 
 			while ($iDateFrom < $iDateTo) {
-				$iDateFrom+=86400; // add 24 hours
+				$iDateFrom += 86400; // add 24 hours
 				array_push($aryRange, date('Y-m-d', $iDateFrom));
 			}
 		}
@@ -192,6 +191,45 @@ class Functions {
 		header('Content-Disposition: attachement; filename="' . $filename . '";');
 		// make php send the generated csv lines to the browser
 		fpassthru($f);
+	}
+
+	static function download($filename) {
+		// Redirect output to a client’s web browser (Excel2007)
+		$mime = self::mime($filename);
+		header('Content-Type: ' . $mime);
+		header('Content-Disposition: attachment;filename="' . basename($filename) . '"');
+		header('Cache-Control: max-age=0');
+// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+
+// If you're serving to IE over SSL, then the following may be needed
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+		header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header('Pragma: public'); // HTTP/1.0
+
+		echo file_get_contents($filename);
+
+//		$objWriter = \PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+//		$objWriter->save('php://output');
+		exit;
+	}
+
+	static function mime($file_location) {
+		$mimepath = '/usr/share/magic'; // may differ depending on your machine
+		// try /usr/share/file/magic if it doesn't work
+		$mime = finfo_open(FILEINFO_MIME);
+
+		if ($mime === FALSE) {
+			throw new Exception('Unable to open finfo');
+		}
+		$filetype = finfo_file($mime, $file_location);
+		finfo_close($mime);
+		if ($filetype === FALSE) {
+			throw new Exception('Unable to recognise filetype');
+		}
+
+		return $filetype;
 	}
 
 }
