@@ -171,7 +171,11 @@ class Table {
 	}
 
 	private function test_conditions($fields, $conditions) {
-
+		
+		if(is_callable($conditions)) {
+			return $conditions($fields);
+		}
+		
 		if (!is_array(reset($conditions))) {
 			$conditions = [$conditions];
 		}
@@ -184,6 +188,9 @@ class Table {
 
 		foreach ($conditions as $single) { // Or Condition by default
 			// test that the conditional operator is allowed
+			
+			
+			
 			if (in_array($single['condition'], $con_op)) {
 
 				$field = $single['field'];

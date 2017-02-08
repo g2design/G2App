@@ -34,6 +34,12 @@ class View extends Base {
 		
 	}
 	
+	/**
+	 * 
+	 * @param type $template
+	 * @param type $other_module
+	 * @return \G2Design\G2App\View
+	 */
 	public static function getInstance($template, $other_module = false) {
 		$class= get_called_class();
 		return new $class($template, $other_module);
