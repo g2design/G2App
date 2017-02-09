@@ -211,16 +211,21 @@ class G2App extends ClassStructs\Singleton {
 	
 	function &console($console, $class) {
 		//Test that the class does infact exit
-		
 		$reflection = new \ReflectionClass($class);
 		if($reflection->getName()) {
 			$this->commands[$console] = $class;
+		} else {
+			throw new \Exception("Invalid class $class");
 		}
 		return $this;
 	}
 
 	function cli() {
+		
 		if (PHP_SAPI == 'cli') {
+			foreach ($this->modules as $mod)
+				$mod->init();
+			
 			//Find the command that is executed
 			global $argv;
 			
@@ -240,6 +245,7 @@ class G2App extends ClassStructs\Singleton {
 			$arguments = array_merge($arguments, $argv);
 			
 			//Find the command/controller
+			
 			if(isset($this->commands[$command])) {
 				$action = $this->commands[$command];
 				
@@ -270,11 +276,11 @@ class G2App extends ClassStructs\Singleton {
 							$reflect = new \ReflectionMethod($instance, $function);
 							if($reflect->getNumberOfRequiredParameters() <= count($arguments)) {
 								call_user_func_array([$instance, $function], $arguments);
-								
+								return;
 							}
 							print "Invalid Argument Count. Needs " . $reflect->getNumberOfRequiredParameters()+1;
 						} else {
-							print "Invalid Command";exit;
+							print "Invalid Command on string";exit;
 						}
 					}
 					
