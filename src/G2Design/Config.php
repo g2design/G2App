@@ -34,21 +34,33 @@ class Config extends ClassStructs\Singleton {
 	static function load_config(&$config) {
 		try {
 			$new_config = [];
-			foreach ($config as $key => $value) {
-				if (is_string($value) && strpos($value, 'load-config:') !== false) { // Found Load Path
-					$file = str_replace('load-config:', '', $value);
-					
-					$reader = new \Zend\Config\Reader\Json();
-					$c_ar = $reader->fromFile($file);
-					$new_config = array_merge($new_config, $c_ar);
-							
-							
-				} else {
-					$config->{$key} = self::load_config($value);
+			$recheck = true;
+			while ($recheck) {
+				$recheck = false;
+				foreach ($config as $key => $value) {
+					if (is_string($value) && strpos($value, 'load-config:') !== false) { // Found Load Path
+						$config_ar = $config->toArray();
+
+						$file = str_replace('load-config:', '', $value);
+
+						$reader = new \Zend\Config\Reader\Json();
+						$c_ar = $reader->fromFile($file);
+						$new_config = array_merge($new_config, $c_ar);
+
+						if ($key > 0) {
+							$new_config = array_merge(array_slice($config_ar, 0, $key), $c_ar, array_slice($config_ar, $key + 1, count($config_ar) - $key));
+						} else {
+							$new_config = array_merge($c_ar, array_slice($config_ar, $key + 1, count($config_ar) - $key));
+						}
+
+						$recheck = true;
+					} else {
+						$config->{$key} = self::load_config($value);
+					}
 				}
+
+				$config = empty($new_config) ? $config : new \Zend\Config\Config($new_config, true);
 			}
-			
-			$config = empty($new_config) ? $config : new \Zend\Config\Config($new_config, true);
 
 			return $config;
 		} catch (Exception $ex) {

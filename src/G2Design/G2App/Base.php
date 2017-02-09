@@ -56,6 +56,7 @@ class Base {
 		if(!isset(self::$session[$id])) {
 			$factory = new Session\SessionFactory();
 			$session = $factory->newInstance($_COOKIE);
+			$session->setCacheExpire(24*60);
 			self::$session_manager = $session;
 			self::$session[$id] = $session->getSegment($id);
 		}

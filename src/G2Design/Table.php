@@ -80,6 +80,14 @@ class Table {
 		}
 		$this->renderers[] = $renderer;
 	}
+	
+	function &render_field($field, callable $function) {
+		$renderer = new DataTable\Renderer($field);
+		$renderer->set_function($function);
+		
+		$this->add_renderer($renderer);
+		return $this;
+	}
 
 	function render_value($field, $value, $data) {
 		foreach ($this->renderers as $render) {
@@ -163,7 +171,11 @@ class Table {
 	}
 
 	private function test_conditions($fields, $conditions) {
-
+		
+		if(is_callable($conditions)) {
+			return $conditions($fields);
+		}
+		
 		if (!is_array(reset($conditions))) {
 			$conditions = [$conditions];
 		}
@@ -176,6 +188,9 @@ class Table {
 
 		foreach ($conditions as $single) { // Or Condition by default
 			// test that the conditional operator is allowed
+			
+			
+			
 			if (in_array($single['condition'], $con_op)) {
 
 				$field = $single['field'];
