@@ -5,7 +5,7 @@ namespace G2Design;
 use Phroute\Phroute\RouteCollector,
 	Exception;
 
-define( 'REDBEAN_MODEL_PREFIX', '\\Model\\' );
+define('REDBEAN_MODEL_PREFIX', '\\Model\\');
 
 class G2App extends ClassStructs\Singleton {
 
@@ -18,6 +18,7 @@ class G2App extends ClassStructs\Singleton {
 	 * @var RouteCollector
 	 */
 	var $router = null, $modules = [];
+	private $commands;
 
 	protected function __construct(\Composer\Autoload\ClassLoader $loader) {
 		$this->router = new RouteCollector();
@@ -82,19 +83,22 @@ class G2App extends ClassStructs\Singleton {
 		echo $response;
 	}
 
-	function add_route($slug, callable $function) {
-		self::getInstance()->router->any($slug, $function);
+	function &add_route($slug, callable $function) {
+		$this->router->any($slug, $function);
+		return $this;
 	}
 
-	function add_module(ClassStructs\Module $module) {
+	function &add_module(ClassStructs\Module $module) {
 		$module->connect($this);
 
 //		$module->init();
 
 		$this->modules[] = $module;
+		
+		return $this;
 	}
 
-	function add_modules($directory) {
+	function &add_modules($directory) {
 		$dirs = Utils\Functions::directoryToArray($directory, false);
 
 		$classes = [];
@@ -123,6 +127,8 @@ class G2App extends ClassStructs\Singleton {
 				$this->add_module($module);
 			}
 		}
+		
+		return $this;
 	}
 
 	static function __module_instance($file) {
@@ -153,10 +159,12 @@ class G2App extends ClassStructs\Singleton {
 		} else {
 			throw new Exception('Singleton Not instantiated');
 		}
+		
 	}
 
-	function defaultController($controller) {
+	function &defaultController($controller) {
 		$this->router->controller('/', $controller);
+		return $this;
 	}
 
 	/**
@@ -188,6 +196,93 @@ class G2App extends ClassStructs\Singleton {
 		}
 
 		$jobby->run();
+	}
+
+	/**
+	 * Registers a console command
+	 * 
+	 * @param type $command
+	 * @param \G2Design\callable $action
+	 */
+	function &command($command, callable $action) {
+		$this->commands[$command] = $action;
+		return $this;
+	}
+	
+	function &console($console, $class) {
+		//Test that the class does infact exit
+		
+		$reflection = new \ReflectionClass($class);
+		if($reflection->getName()) {
+			$this->commands[$console] = $class;
+		}
+		return $this;
+	}
+
+	function cli() {
+		if (PHP_SAPI == 'cli') {
+			//Find the command that is executed
+			global $argv;
+			
+			$file =  array_shift($argv);
+			$command = array_shift($argv);
+			//Second is either options or first argument
+			$second = array_shift($argv);
+			$arguments = [];
+			if(!empty($second)) {
+				if(Utils\Functions::startsWith($second, '-')) { // Second is options
+					$options = (array) $second;
+				} else {
+					$arguments[] = $second;
+				}
+			}
+			
+			$arguments = array_merge($arguments, $argv);
+			
+			//Find the command/controller
+			if(isset($this->commands[$command])) {
+				$action = $this->commands[$command];
+				
+				//test if this is a callable
+				if(is_callable($action)) {
+					$reflect = new \ReflectionFunction($action);
+					
+					if($reflect->getNumberOfRequiredParameters() <= count($arguments)) {
+						call_user_func_array($action, $arguments);
+					} else {
+						print "Incorrect argument count. Needs {$reflect->getNumberOfRequiredParameters()}";
+					}
+					return;
+				} else if(is_string($action)) { //Test if this is a Console Class
+					$reflect = new \ReflectionClass($action);
+					//$argument one equals the function that needs to be called
+					if(count($arguments) < 1) {
+						print "Incorrect argument count.";
+						exit;
+					}
+					
+					if($reflect->getName()) { // The class exists
+						$function = array_shift($arguments);
+						$instance = new $action;
+						if(method_exists($instance, $function)) {
+							
+							//Validate the amount of required paramaters
+							$reflect = new \ReflectionMethod($instance, $function);
+							if($reflect->getNumberOfRequiredParameters() <= count($arguments)) {
+								call_user_func_array([$instance, $function], $arguments);
+								
+							}
+							print "Invalid Argument Count. Needs " . $reflect->getNumberOfRequiredParameters()+1;
+						} else {
+							print "Invalid Command";exit;
+						}
+					}
+					
+				}
+			}
+			
+			print "Invalid Command";
+		}
 	}
 
 }
