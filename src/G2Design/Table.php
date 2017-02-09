@@ -68,9 +68,10 @@ class Table {
 	 * @param type $label
 	 * @param type $classes
 	 */
-	function add_function($action, $label, $classes = []) {
+	function &add_function($action, $label, $classes = []) {
 
 		$this->functions[] = ['action' => $action, 'label' => $label, 'classes' => $classes];
+		return $this;
 	}
 
 	function add_renderer(DataTable\Renderer $renderer, $field = false) {
