@@ -246,7 +246,7 @@ class Table {
 	}
 
 	function render() {
-		$twig_cache = getcwd() . 'cache/tables/';
+		$twig_cache = getcwd() . '/cache/tables/';
 		$twig_folder = __DIR__ . '/DataTable';
 
 		$params = array(
