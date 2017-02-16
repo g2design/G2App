@@ -232,15 +232,20 @@ class G2App extends ClassStructs\Singleton {
 			$file =  array_shift($argv);
 			$command = array_shift($argv);
 			//Second is either options or first argument
-			$second = array_shift($argv);
+//			$second = array_shift($argv);
 			$arguments = [];
-			if(!empty($second)) {
-				if(Utils\Functions::startsWith($second, '-')) { // Second is options
-					$options = (array) $second;
+			
+			foreach($argv as $key => $arg) {
+				if(Utils\Functions::startsWith($arg, '-')) { // this is an option
+					$options[ltrim($arg, '-')] = $argv[$key+1];
+					unset($argv[$key+1]);
+					
 				} else {
-					$arguments[] = $second;
+					$arguments[] = $arg;
 				}
+				
 			}
+			
 			
 			$arguments = array_merge($arguments, $argv);
 			
@@ -274,6 +279,11 @@ class G2App extends ClassStructs\Singleton {
 							
 							//Validate the amount of required paramaters
 							$reflect = new \ReflectionMethod($instance, $function);
+							
+							if($instance instanceof G2App\CMD && isset($options)){
+								$instance->set_options($options);
+							}
+							
 							if($reflect->getNumberOfRequiredParameters() <= count($arguments)) {
 								call_user_func_array([$instance, $function], $arguments);
 								return;
