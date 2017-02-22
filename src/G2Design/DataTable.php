@@ -37,7 +37,7 @@ class DataTable extends Table {
 	 * @param type $label The Label
 	 * @return type
 	 */
-	function add_field($field , $label = false) {
+	function &add_field($field , $label = false) {
 		
 		$this->fields = $this->fields != null ? $this->fields : [];
 		
@@ -47,6 +47,7 @@ class DataTable extends Table {
 		
 		array_push($this->fields, $field);
 		
+		return $this;
 	}
 
 	function default_fields() {
