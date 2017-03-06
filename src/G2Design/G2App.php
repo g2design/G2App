@@ -145,6 +145,21 @@ class G2App extends ClassStructs\Singleton {
 			throw new Exception('Singleton Not instantiated');
 		}
 	}
+	
+	static function __get_module($module_name) {
+		$instance = self::getInstance();
+		if ($instance) {
+			foreach ($instance->modules as $module) { /* @var $module ClassStructs\Module */
+				$reflection = new \ReflectionClass($module);
+				
+				if($reflection->getName() == $module_name) {
+					return $module;
+				}
+			}
+		} else {
+			throw new Exception('Singleton Not instantiated');
+		}
+	}
 
 	static function __module_dir($file) {
 		$instance = self::getInstance();
