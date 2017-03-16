@@ -190,5 +190,13 @@ class DataTable extends Table {
 			}
 		}
 	}
+	
+	
+	function render_field_as($field, $callable ){
+		$renderer = new \G2Design\DataTable\Renderer($field);
+		$renderer->set_function($callable);
+		
+		$this->add_renderer($renderer);
+	}
 
 }

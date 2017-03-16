@@ -33,7 +33,7 @@ class Request extends ClassStructs\Singleton {
 			$new = [];
 			$folder = [];
 			foreach($request as $index => $part) {
-				if($part != $script[$index]) {
+				if( !isset( $script[$index]) || $part != $script[$index]) {
 					$new[] = $part;
 				} else {
 					$folder[] = $part;
