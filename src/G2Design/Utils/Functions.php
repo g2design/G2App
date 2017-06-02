@@ -231,7 +231,7 @@ class Functions {
 
 		return $filetype;
 	}
-	
+
 	/**
 	 * Creates an urlsave version of a string
 	 * 
@@ -262,6 +262,28 @@ class Functions {
 		}
 
 		return $text;
+	}
+
+	static function sanitize_from_word($content) {
+		// Convert microsoft special characters
+		$replace = array(
+			"" => "'",
+			"" => "'",
+			"" => '"',
+			"" => '"',
+			"" => "-",
+			"" => "-",
+			"" => "&#8230;"
+		);
+
+		foreach ($replace as $k => $v) {
+			$content = str_replace($k, $v, $content);
+		}
+
+		// Remove any non-ascii character
+		$content = preg_replace('/[^\x20-\x7E]*/', '', $content);
+
+		return $content;
 	}
 
 }
