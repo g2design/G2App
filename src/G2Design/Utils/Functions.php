@@ -1,6 +1,7 @@
 <?php
 
 namespace G2Design\Utils;
+use Exception;
 
 class Functions {
 
@@ -194,6 +195,10 @@ class Functions {
 	}
 
 	static function download($filename) {
+		if(!file_exists($filename)) {
+			throw new Exception("File `$filename` does not exist");
+		}
+		
 		// Redirect output to a client’s web browser (Excel2007)
 		$mime = self::mime($filename);
 		header('Content-Type: ' . $mime);
